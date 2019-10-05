@@ -16,6 +16,7 @@
 package com.example.android.flavor;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +27,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /*
-* {@link AndroidFlavorAdapter} is an {@link ArrayAdapter} that can provide the layout for each list
-* based on a data source, which is a list of {@link AndroidFlavor} objects.
-* */
+ * {@link AndroidFlavorAdapter} is an {@link ArrayAdapter} that can provide the layout for each list
+ * based on a data source, which is a list of {@link AndroidFlavor} objects.
+ * */
 public class AndroidFlavorAdapter extends ArrayAdapter<AndroidFlavor> {
 
     private static final String LOG_TAG = AndroidFlavorAdapter.class.getSimpleName();
@@ -52,17 +53,18 @@ public class AndroidFlavorAdapter extends ArrayAdapter<AndroidFlavor> {
     /**
      * Provides a view for an AdapterView (ListView, GridView, etc.)
      *
-     * @param position The position in the list of data that should be displayed in the
-     *                 list item view.
+     * @param position    The position in the list of data that should be displayed in the
+     *                    list item view.
      * @param convertView The recycled view to populate.
-     * @param parent The parent ViewGroup that is used for inflation.
+     * @param parent      The parent ViewGroup that is used for inflation.
      * @return The View for the position in the AdapterView.
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         // Check if the existing view is being reused, otherwise inflate the view
         View listItemView = convertView;
-        if(listItemView == null) {
+        if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.list_item, parent, false);
         }
@@ -74,19 +76,25 @@ public class AndroidFlavorAdapter extends ArrayAdapter<AndroidFlavor> {
         TextView nameTextView = (TextView) listItemView.findViewById(R.id.version_name);
         // Get the version name from the current AndroidFlavor object and
         // set this text on the name TextView
-        nameTextView.setText(currentAndroidFlavor.getVersionName());
+        if (currentAndroidFlavor != null) {
+            nameTextView.setText(currentAndroidFlavor.getVersionName());
+        }
 
         // Find the TextView in the list_item.xml layout with the ID version_number
         TextView numberTextView = (TextView) listItemView.findViewById(R.id.version_number);
         // Get the version number from the current AndroidFlavor object and
         // set this text on the number TextView
-        numberTextView.setText(currentAndroidFlavor.getVersionNumber());
+        if (currentAndroidFlavor != null) {
+            numberTextView.setText(currentAndroidFlavor.getVersionNumber());
+        }
 
         // Find the ImageView in the list_item.xml layout with the ID list_item_icon
         ImageView iconView = (ImageView) listItemView.findViewById(R.id.list_item_icon);
         // Get the image resource ID from the current AndroidFlavor object and
         // set the image to iconView
-        iconView.setImageResource(currentAndroidFlavor.getImageResourceId());
+        if (currentAndroidFlavor != null) {
+            iconView.setImageResource(currentAndroidFlavor.getImageResourceId());
+        }
 
         // Return the whole list item layout (containing 2 TextViews and an ImageView)
         // so that it can be shown in the ListView
